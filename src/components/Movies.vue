@@ -1,6 +1,6 @@
 <template>
   <div>
-  <h1>{{ msg }}</h1>
+    <h1>{{ msg }}</h1>
     <nav class="navbar navbar-light bg-light bg-dark">
       <a href="/" class="navbar-brand text-white"> Refresh </a>
     </nav>
@@ -10,7 +10,7 @@
         <div class="col-md-5">
           <div class="card">
             <div class="card-body">
-              <form @submit.prevent="addMovie">
+              <form @submit.prevent="addMovie()">
                 <div class="form-group">
                   <input
                     type="text"
@@ -48,12 +48,12 @@
                 <th>DESCRIPTION</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody @submit.prevent="getMovie()">
               <tr v-for="movie of movies" :key="movie">
                 <td>{{ movie.title }}</td>
                 <td>{{ movie.description }}</td>
                 <td>
-                  <button @click="delete movie._id" class="btn btn-danger">
+                  <button @click="delete(movie._id)" class="btn btn-danger">
                     DELETE
                   </button>
                   <button @click="editMovie(movie._id)" class="btn-secondary">
@@ -78,54 +78,60 @@ class Movie {
 }
 
 export default {
+
   data() {
     return {
       movie: new Movie(),
       movies: [],
       edit: false,
-      toEdit: "",
+      toEdit: ""
     };
   },
+
+
   created() {
     this.getMovie();
   },
   name: "Movies",
   props: {
-    msg: String,
+    msg: String
   },
+
   methods: {
+
     getMovie() {
-      fetch("/")
-        .then((res) => res.json())
-        .then((data) => {
+      fetch("http://localhost:3000/api/films/")
+        .then(res => res.json())
+        .then(data => {
           this.movies = data;
         });
     },
+
     addMovie() {
       if (this.edit === false) {
-        fetch("/api", {
+        fetch("http://localhost:3000/api/films/", {
           method: "POST",
           body: JSON.stringify(this.movie),
           headers: {
             Accept: "application/json",
-            "Content-type": "application/json",
-          },
+            "Content-type": "application/json"
+          }
         })
-          .then((res) => res.json())
-          .then((data) => {
+          .then(res => res.json())
+          .then(data => {
             this.getMovie(data);
           });
       } else {
-        fetch("/api" + this.toEdit, {
+        fetch("http://localhost:3000/api/films/" + this.toEdit, {
           method: "PUT",
           body: JSON.stringify(this.movie),
           headers: {
             Accept: "application/json",
-            "Content-type": "application/json",
-          },
+            "Content-type": "application/json"
+          }
         })
-          .then((res) => res.json())
-          .then((data) => {
+          .then(res => res.json())
+          .then(data => {
             this.getMovie(data);
             this.edit = false;
           });
@@ -133,29 +139,33 @@ export default {
 
       this.movie = new Movie();
     },
+
+
     delete(id) {
-      fetch("/api" + id, {
+      fetch("http://localhost:3000/api/films/" + id, {
         method: "DELETE",
         headers: {
           Accept: "application/json",
-          "Content-type": "application/json",
-        },
+          "Content-type": "application/json"
+        }
       })
-        .then((res) => res.json())
-        .then((data) => {
+        .then(res => res.json())
+        .then(data => {
           this.getMovie(data);
         });
     },
+
+
     editMovie(id) {
-      fetch("/api" + id)
-        .then((res) => res.json())
-        .then((data) => {
+      fetch("http://localhost:3000/api/films/" + id)
+        .then(res => res.json())
+        .then(data => {
           this.movie = new Movie(data.title, data.description);
           this.toEdit = data._id;
           this.edit = true;
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
