@@ -53,10 +53,10 @@
                 <td>{{ movie.title }}</td>
                 <td>{{ movie.description }}</td>
                 <td>
-                  <button @click="delete(movie._id)" class="btn btn-danger">
+                  <button @click="delete(movie.id)" class="btn btn-danger">
                     DELETE
                   </button>
-                  <button @click="editMovie(movie._id)" class="btn-secondary">
+                  <button @click="editMovie(movie.id)" class="btn-secondary">
                     EDIT
                   </button>
                 </td>
@@ -142,7 +142,7 @@ export default {
 
 
     delete(id) {
-      fetch("http://localhost:3000/api/films/" + id, {
+      fetch(`http://localhost:3000/api/films/${id}`, {
         method: "DELETE",
         headers: {
           Accept: "application/json",
@@ -157,11 +157,11 @@ export default {
 
 
     editMovie(id) {
-      fetch("http://localhost:3000/api/films/" + id)
+      fetch(`http://localhost:3000/api/films/${id}` )
         .then(res => res.json())
         .then(data => {
           this.movie = new Movie(data.title, data.description);
-          this.toEdit = data._id;
+          this.toEdit = data.id;
           this.edit = true;
         });
     }
