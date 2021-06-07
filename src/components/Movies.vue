@@ -1,6 +1,6 @@
 <template>
-  <h1>{{ msg }}</h1>
   <div>
+  <h1>{{ msg }}</h1>
     <nav class="navbar navbar-light bg-light bg-dark">
       <a href="/" class="navbar-brand text-white"> Refresh </a>
     </nav>
