@@ -52,10 +52,12 @@
               <tr v-for="movie of movies" :key="movie">
                 <td>{{ movie.title }}</td>
                 <td>{{ movie.description }}</td>
+
                 <td>
-                  <button @click="delete(movie.id)" class="btn btn-danger">
+                  <button @click="deleteMovie(movie.id)" class="btn btn-danger">
                     DELETE
                   </button>
+                  
                   <button @click="editMovie(movie.id)" class="btn-secondary">
                     EDIT
                   </button>
@@ -141,7 +143,7 @@ export default {
     },
 
 
-    delete(id) {
+    deleteMovie(id) {
       fetch(`http://localhost:3000/api/films/${id}`, {
         method: "DELETE",
         headers: {
@@ -150,9 +152,10 @@ export default {
         }
       })
         .then(res => res.json())
-        .then(data => {
-          this.getMovie(data);
-        });
+          .then(data => {
+            this.getMovie(data);
+          });
+        
     },
 
 
